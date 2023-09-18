@@ -2,14 +2,23 @@ import asyncio
 import random
 import string
 from cashapp import cashapp
+from faker import Faker
 
-def generate_invoice_id(length=15):
-    chars = string.ascii_letters + string.digits
-    invoice_id = ''.join(random.choices(chars, k=length))
-    return invoice_id
 
-invoiceid = geninvoice()
-amount = 20 #20
+def generate_invoice_id():
+    fake = Faker('en_US')
+    generatedTransactionId = fake.name()
+    print(generatedTransactionId)
+    return generatedTransactionId
+
+invoiceid = generate_invoice_id()
+print("Generated transaction ID: ")
+print(invoiceid)
+# DIAGNOSTICS REMOVE IN PROD
+amount = 1 #20 Dolars
+clientIdentifier = input("Enter clientIdentifier: ")
 print(f"Invoice ${amount}, Invoice ID (NOTE): {invoiceid}")
-cashapp.fetchmail()
-print(cashapp.check_if_paid(invoiceid, amount))
+input("Press enter when transaction is complete.")
+# Query for new transactions
+cashapp().fetchmail()
+print(cashapp.check_if_paid(clientIdentifier, invoiceid, amount))
